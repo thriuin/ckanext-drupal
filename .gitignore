@@ -1,0 +1,5 @@
+
+ckanext_drupal.egg-info
+*.pyc
+.project
+.pydevproject
