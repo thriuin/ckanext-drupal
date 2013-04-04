@@ -60,27 +60,21 @@ class DrupalCommand(CkanCommand):
        p.title, 
        case when pe1.value is null then '' else pe1.value end, 
        case when p.notes   is null then '' else p.notes   end, 
-       case when pe2.value is null then '' else pe2.value end, 
-       case when p.url     is null then '' else p.url     end,
-       case when pe3.value is null then '' else pe3.value end
+       case when pe2.value is null then '' else pe2.value end 
       from package p 
       left join package_extra pe1 on p.id = pe1.package_id and pe1.key = 'title_fra'
-      left join package_extra pe2 on p.id = pe2.package_id and pe2.key = 'notes_fra'
-      left join package_extra pe3 on p.id = pe3.package_id and pe3.key = 'url_fra'""")
+      left join package_extra pe2 on p.id = pe2.package_id and pe2.key = 'notes_fra'""")
           
     # retrieve the records from the CKAN database and insert into the Drupal database
     for rec in ckan_cursor:
-      print "Inserting Package name: %s"  % rec[1]
       drupal_cursor.execute("""insert into od_package (
   pkg_id,
   pkg_name,
   pkg_title_en,
   pkg_title_fr,
   pkg_description_en,
-  pkg_description_fr,
-  pkg_url_en,
-  pkg_url_fr
-) values (%s, %s, %s, %s, %s, %s, %s, %s)""", (rec[0], rec[1], rec[2], rec[3], rec[4], rec[5], rec[6], rec[7]))
+  pkg_description_fr
+) values (%s, %s, %s, %s, %s, %s)""", (rec[0], rec[1], rec[2], rec[3], rec[4], rec[5]))
     
     # Close the connections
     
