@@ -67,7 +67,7 @@ class DrupalCommand(CkanCommand):
           
     # retrieve the records from the CKAN database and insert into the Drupal database
     for rec in ckan_cursor:
-      drupal_cursor.execute("""insert into od_package (
+      drupal_cursor.execute("""insert into opendata_package (
   pkg_id,
   pkg_name,
   pkg_title_en,
