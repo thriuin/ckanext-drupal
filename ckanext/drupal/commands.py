@@ -74,7 +74,7 @@ class DrupalCommand(CkanCommand):
   pkg_title_fr,
   pkg_description_en,
   pkg_description_fr
-) values (%s, %s, %s, %s, %s, %s)""", (rec[0], rec[1], format_drupal_string(rec[2]), format_drupal_string(rec[3]), format_drupal_string(rec[4]), format_drupal_string(rec[5])))
+) values (%s, %s, %s, %s, %s, %s)""", (rec[0], format_drupal_string(rec[1]), format_drupal_string(rec[2]), format_drupal_string(rec[3]), format_drupal_string(rec[4]), format_drupal_string(rec[5])))
     
     # Close the connections
     
