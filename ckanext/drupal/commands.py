@@ -87,6 +87,6 @@ class DrupalCommand(CkanCommand):
  
 def format_drupal_string(ds):
   if len(ds) > 200:
-    return ds.format("{0}...", ds[0:200])
+    return "{0}...".format(ds[0:200])
   else:
     return ds
