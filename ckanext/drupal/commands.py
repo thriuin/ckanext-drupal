@@ -74,7 +74,7 @@ class DrupalCommand(CkanCommand):
   pkg_title_fr,
   pkg_description_en,
   pkg_description_fr
-) values (%s, %s, %s, %s, %s, %s)""", (rec[0], rec[1], rec[2], rec[3], rec[4], rec[5]))
+) values (%s, %s, %s, %s, %s, %s)""", (rec[0], rec[1], format_drupal_string(rec[2]), format_drupal_string(rec[3]), format_drupal_string(rec[4]), format_drupal_string(rec[5])))
     
     # Close the connections
     
@@ -85,3 +85,8 @@ class DrupalCommand(CkanCommand):
     ckan_cursor.close()
     ckan_conn.close()
  
+def format_drupal_string(ds):
+  if len(ds) > 200:
+    return ds.format("{0}...", ds[0:200])
+  else:
+    return ds
