@@ -4,6 +4,8 @@ from ckan.lib.cli import parse_db_config
 import psycopg2
 import sys
 
+psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
+psycopg2.extensions.register_type(psycopg2.extensions.UNICODEARRAY)
 
 class DrupalCommand(CkanCommand):
   """
@@ -87,6 +89,6 @@ class DrupalCommand(CkanCommand):
  
 def format_drupal_string(ds):
   if len(ds) > 200:
-    return "{0}...".format(ds[0:200])
+    return u"{0}...".format(ds[0:200])
   else:
     return ds
