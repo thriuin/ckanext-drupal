@@ -4,8 +4,6 @@ from ckan.lib.cli import parse_db_config
 import psycopg2
 import sys
 
-psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
-psycopg2.extensions.register_type(psycopg2.extensions.UNICODEARRAY)
 
 class DrupalCommand(CkanCommand):
   """
@@ -67,9 +65,14 @@ class DrupalCommand(CkanCommand):
       left join package_extra pe1 on p.id = pe1.package_id and pe1.key = 'title_fra'
       left join package_extra pe2 on p.id = pe2.package_id and pe2.key = 'notes_fra'""")
           
+
     # retrieve the records from the CKAN database and insert into the Drupal database
     for rec in ckan_cursor:
-      drupal_cursor.execute("""insert into opendata_package (
+      drupal_cursor.execute("""select count(*) from opendata_package where pkg_id = %s""", (rec[0],))
+      row = drupal_cursor.fetchone()
+      if row[0] == 0:
+        print "Inserting package %s" % (rec[0],)
+        drupal_cursor.execute("""insert into opendata_package (
   pkg_id,
   pkg_name,
   pkg_title_en,
@@ -77,7 +80,7 @@ class DrupalCommand(CkanCommand):
   pkg_description_en,
   pkg_description_fr
 ) values (%s, %s, %s, %s, %s, %s)""", (rec[0], format_drupal_string(rec[1]), format_drupal_string(rec[2]), format_drupal_string(rec[3]), format_drupal_string(rec[4]), format_drupal_string(rec[5])))
-    
+
     # Close the connections
     
     drupal_conn.commit()
