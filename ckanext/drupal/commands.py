@@ -143,8 +143,19 @@ class DrupalCommand(CkanCommand):
             if row[0] == 0:
                 titles = json.loads(rec[2])
                 descriptions = json.loads(rec[3])
-                print "Inserting package %s: %s %s %s: %s %s" % (rec[0], rec[1], titles['en'], titles['fr'],
-                                                       descriptions['en'], descriptions['fr'])
+                title_en = ''
+                if 'en' in titles:
+                    title_en = titles['en']
+                title_fr = ''
+                if 'fr' in titles:
+                    title_fr = titles['fr']
+                desc_en = ''
+                if 'en' in descriptions:
+                    desc_en = descriptions['en']
+                desc_fr = ''
+                if 'fr' in descriptions:
+                    desc_fr = descriptions['fr']
+                print "Inserting package %s: %s %s %s: %s %s" % (rec[0], rec[1], title_en, title_fr, desc_en, desc_fr)
                 try:
                     drupal_cursor.execute("""insert into opendata_package (
   pkg_id,
@@ -153,8 +164,7 @@ class DrupalCommand(CkanCommand):
   pkg_title_fr,
   pkg_description_en,
   pkg_description_fr
-) values (%s, %s, %s, %s, %s, %s)""", (rec[0], rec[1], titles['en'], titles['fr'],
-                                                       descriptions['en'], descriptions['fr']))
+) values (%s, %s, %s, %s, %s, %s)""", (rec[0], rec[1], title_en, title_fr, desc_en, desc_fr))
 
                 except psycopg2.DataError, e:
                     self.logger.warn('Postgresql Database Exception %s', e.message)
