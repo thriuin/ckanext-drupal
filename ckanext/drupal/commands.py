@@ -165,7 +165,7 @@ class DrupalCommand(CkanCommand):
   pkg_description_en,
   pkg_description_fr
 ) values (%s, %s, %s, %s, %s, %s)""", (rec[0], rec[1], title_en, title_fr, desc_en, desc_fr))
-
+                    drupal_conn.commit()
                 except psycopg2.DataError, e:
                     self.logger.warn('Postgresql Database Exception %s', e.message)
 
@@ -180,15 +180,7 @@ class DrupalCommand(CkanCommand):
 
 
     def format_drupal_string(self, ds):
-        dstr = ''
-        try:
-            if len(ds) > 200:
-                dstr = u"{0}...".encode('utf-8', 'replace').format(ds[0:200])
-            else:
-                dstr =  ds.encode('utf-8', 'replace')
-        except UnicodeDecodeError, e:
-            warn_args = {'drupal_string': ds, 'x_msg': e.message}
-            self.logger.warn('Unicode Decode Exception for %(drupal_string)s: %(x_msg)s', warn_args)
-            dstr = ''
-        dstr = dstr.replace('\xc3\x2e','')
+        dstr = ds.decode('utf-8')
+        if len(dstr) > 200:
+            dstr = u"{0}...".format(dstr[0:200])
         return dstr
